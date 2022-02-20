@@ -45,11 +45,12 @@ def optimize_a(b, a_init):
     
     a = np.copy(a_init)
     for i in range(N):
-        bad_pos = np.where(coeffs[i,:] != np.max(coeffs[i,:]))[0]
+        sorted_coefs = np.sort(coeffs[i,:])
+        bad_pos = np.where(coeffs[i,:] != sorted_coefs[-1])[0]
         opt = np.copy(a[i,:])
         opt[bad_pos] = 0.0
         opt = opt / np.sum(opt)
-        a[i,:] = a[i,:] + (opt - a[i,:]) * rate
+        a[i,:] = a[i,:] + (opt - a[i,:]) * rate * (sorted_coefs[-1] - sorted_coefs[-2])
         a[i,:] = a[i,:] / np.sum(a[i,:])
     a[a<0] = 0.0
     
