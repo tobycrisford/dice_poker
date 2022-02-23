@@ -7,8 +7,8 @@ Created on Sat Feb 19 22:14:16 2022
 
 import numpy as np
 
-N = 6
-max_bet = 3
+N = 20
+max_bet = 10
 rate = 0.01
 
 def optimize_b(a, b_init):
@@ -47,10 +47,11 @@ def optimize_a(b, a_init):
     for i in range(N):
         sorted_coefs = np.sort(coeffs[i,:])
         bad_pos = np.where(coeffs[i,:] != sorted_coefs[-1])[0]
+        next_to_max = sorted_coefs[sorted_coefs != sorted_coefs[-1]][-1]
         opt = np.copy(a[i,:])
         opt[bad_pos] = 0.0
         opt = opt / np.sum(opt)
-        a[i,:] = a[i,:] + (opt - a[i,:]) * rate * (sorted_coefs[-1] - sorted_coefs[-2])
+        a[i,:] = a[i,:] + (opt - a[i,:]) * rate * (sorted_coefs[-1] - next_to_max)
         a[i,:] = a[i,:] / np.sum(a[i,:])
     a[a<0] = 0.0
     
